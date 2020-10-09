@@ -1,9 +1,13 @@
 package com.learnSpringBoot.conferenceapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "sessions")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Session {
 
     @Id
@@ -14,18 +18,16 @@ public class Session {
     private String session_description;
     private Integer session_length;
 
-    private List<Speaker> speakers;
-
-    public Session() {
-
-    }
-
     @ManyToMany
     @JoinTable(
             name = "session_speakers",
             joinColumns = @JoinColumn(name = "session_id"),
-            inverseJoinColumns = @JoinColumn(name = "speaker_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "speaker_id"))
+    private List<Speaker> speakers;
+
+    public Session() {
+    }
+
     public List<Speaker> getSpeakers() {
         return speakers;
     }
